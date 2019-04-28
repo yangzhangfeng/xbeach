@@ -1,0 +1,17 @@
+# Jupyter
+__pycache__/
+.ipynb_checkpoints/
+xbeach_python/gifs/*
+*.gif
+.png
+# MAC
+.DS_Store
+.AppleDouble
+.LSOverride
+
+
+# Windows
+Thumbs.db
+
+# Data Folder
+data/
