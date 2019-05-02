@@ -96,48 +96,25 @@ def write_tide(root_dir,time,front,back):
         fin.writelines(data)
     return
 
-def utm2geo(x,y,code:int=18,zone:str='northern'):
-    limits = x.shape
-    x2,y2 = np.ma.array(np.zeros(x.shape),mask=x.mask),np.ma.array(np.zeros(y.shape),mask=y.mask)
-    for i in range(0,limits[0]):
-        for ii in range(0,limits[1]):
-            coord = utm.to_latlon(x[i,ii],y[i,ii],code,zone)
-            x2[i,ii] = coord[1] 
-            y2[i,ii] = coord[0]
-    return x2,y2
+def write_vege_map(path:str,bathy_file:str,fname:str='vege_map.txt',elevation:float=0.05):
+    path = pl.Path(path)
+    with open(str(path / bathy_file),'r+') as fin:
+        with open(str(path / fname),'w+') as fout:
+            lines = fin.readlines()
+            for line in lines:
+                data = line.strip().split('  ')
+                for i in range(0,len(data)):
+                   # print(data)
+                    vege = []
+                    new = []
+                    if data != '':            
+                        if float(data[i]) > elevation:
+                            fout.write('   '+str(1))
+                        else:
+                            fout.write('   '+str(0))
+                fout.write('\n')
+    return
 
-def map_plot(x,y,z,data,time,title,levels,lat1:float=np.min(y),lat2:float=np.max(y),lon1:float=np.min(x),lon2:float=np.max(x),label:str='elevation(m)',figsize=(18,10),cmap='jet',save='xbeach.gif'):
-  wl=[]
-  for i in range(0,len(time)):
-    file_number = '%05d'%i
-    fig,ax = plt.subplots(figsize=figsize)
-    data[data <=z+0.0001] = np.nan
-    ax.contourf(x,y,data[i,:,:],levels=levels,cmap=cmap,shading='gouraud',
-                vmin=np.min(levels),vmax=np.max(levels),aspect='auto')
-    m = Basemap(projection='cyl',llcrnrlat=lat1,urcrnrlat=lat2,llcrnrlon=lon1,
-                        urcrnrlon=lon2,resolution='h', epsg = 4269)
-    m.arcgisimage(service='ESRI_Imagery_World_2D', xpixels = 600, verbose= False)
-    cb = ax.colorbar(cmap=cmap,fraction=0.026,pad=0.04) 
-    cb.set_label(label,fontsize=10)
-    ax.autoscale_view(tight=True)
-    plt.savefig('WL{}.png'.format(file_number),dpi=400,bbox_inches = 'tight', pad_inches = 0.1)
-    plt.close()
-    images = []
-  for ii in range(0,len(wl)):
-      frames = Image.open(wl[ii])
-      images.append(frames)
-  images[0].save(save,
-     save_all=True,
-     append_images=images[1:],
-     delay=.1,
-     duration=250,
-     loop=0)
-  for f in glob.glob('WL*'):
-      os.remove(f) 
-
-
-
-  return
 
 
 

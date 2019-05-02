@@ -3,7 +3,8 @@ __pycache__/
 .ipynb_checkpoints/
 xbeach_python/gifs/*
 *.gif
-.png
+*.png
+*.html
 # MAC
 .DS_Store
 .AppleDouble
