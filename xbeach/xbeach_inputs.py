@@ -12,7 +12,7 @@ import folium
 import branca
 from folium.plugins import MeasureControl
 import scipy
-
+import numpy as np
 
 def write_waves(root_dir,h0,Tp,duration,period,mainang=90.0,gammajsp=3.3,s=10.0,fnyq=0.45,timestep=1.0):
 	root_dir = pl.Path(root_dir)
@@ -51,35 +51,15 @@ def write_tide(root_dir,time,front,back):
 		fin.writelines(data)
 	return
 
-def write_spatial_vege(path:str,bathy_file:str,fname:str='vege_map.txt'):
-	path = pl.Path(path)
-	with open(str(path / bathy_file),'r+') as fin:
-		with open(str(path / fname),'w+') as fout:
-			lines = fin.readlines()
-			new_line,temp,ii = 0,0,0
-			for line in lines:
-				temp += 1
-				data = line.strip().split('  ')
-
-				if (temp/28).is_integer():
-					ii = 0
-					new_line += 1
-
-				for i in range(0,len(data)):
-					vege = []
-					new = []
-					if data != '':            
-						if 81 < new_line < 134 and 87 < ii < 132 and 0.05<float(data[i]) < 0.6:
-							fout.write('   '+str(2))
-						elif 0.05 < float(data[i]) < 0.55:
-							fout.write('   '+str(1))
-						elif float(data[i]) > 0.75:
-							fout.write('   '+str(3))
-						else:
-							fout.write('   '+str(0))
-						ii += 1
-
-				fout.write('\n')
-	return
+def write_2delft(path:str,array:np.array,filename:str):
+    xx,yy = array.shape
+    with open(str(path / filename),'w') as fin:
+        for i in range(0,xx):
+            for ii in range(0,yy):
+                if (ii/12).is_integer():
+                    fin.write('   '+str(array[i,ii]) + '\n')
+                else:
+                    fin.write('   '+str(array[i,ii]))
+    return
 
 
