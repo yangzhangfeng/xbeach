@@ -56,7 +56,7 @@ def write_2delft(path:str,array:np.array,filename:str):
     with open(str(path / filename),'w') as fin:
         for i in range(0,xx):
             for ii in range(0,yy):
-                if (ii/12).is_integer():
+                if (ii/12).is_integer() and ii != 0:
                     fin.write('   '+str(array[i,ii]) + '\n')
                 else:
                     fin.write('   '+str(array[i,ii]))

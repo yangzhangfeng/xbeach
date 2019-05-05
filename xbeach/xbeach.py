@@ -147,10 +147,8 @@ def map_velocity(x,y,data,u_velocity,v_velocity,start,time,title,levels,lat1:flo
         loop=0)
     for f in glob.glob('WL*'):
        os.remove(f) 
-
-
-
     return
+
 def contour_map(x,y,z,data,title,levels,lat1:float,lat2:float,lon1:float,lon2:float,label:str='elevation(m)',figsize=(18,10),cmap='jet'):
     data[data.mask]=np.nan
     fig,ax = plt.subplots(figsize=figsize)
@@ -223,7 +221,7 @@ def contour_stations(x,y,data,obs_timeseries,obs_locx,obs_locy,model_timeseries,
         ax1.contourf(x,y,data[i,:,:],levels=levels,cmap='jet',shading='gouraud',vmin=np.min(levels),vmax=np.max(levels),aspect='auto')
         m = Basemap(projection='cyl',llcrnrlat=lat1,urcrnrlat=lat2,llcrnrlon=lon1,
                       urcrnrlon=lon2,resolution='h', epsg = 4269,ax=ax1)
-        m.arcgisimage(service='ESRI_Imagery_World_2D', xpixels = 600, verbose= False)
+        m.arcgisimage(service='ESRI_Imagery_World_2D', xpixels = 400, verbose= False)
         ax2.plot((model_timeseries['date time'][i],model_timeseries['date time'][i]),(-5,5),'k')
         ax3.plot((model_timeseries['date time'][i],model_timeseries['date time'][i]),(-5,5),'k')
         ax4.plot((model_timeseries['date time'][i],model_timeseries['date time'][i]),(-5,5),'k')
@@ -255,7 +253,7 @@ def contour_stations(x,y,data,obs_timeseries,obs_locx,obs_locy,model_timeseries,
             loc='upper center',bbox_to_anchor=(0.5,-0.2),frameon=False,ncol=8)
         #ax2.set_xticks()
         ax1.set_title((title+str(start_date+ timedelta(minutes=i*20))))
-        plt.savefig('WL{}.png'.format(file_number),dpi=400,bbox_inches = 'tight', pad_inches = 0.1)    
+        plt.savefig('WL{}.png'.format(file_number),dpi=300,bbox_inches = 'tight', pad_inches = 0.1)    
         plt.close()
     images = []
     for ii in range(0,len(wl)):
