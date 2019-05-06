@@ -61,7 +61,7 @@ def write_tide(root_dir,time,front,back):
 
 def utm2geo(x,y,code:int=18,zone:str='northern'):
     limits = x.shape
-    x2,y2 = np.array(np.zeros(x.shape)),np.ma.array(np.zeros(y.shape))
+    x2,y2 = np.ma.array(np.zeros(x.shape)),np.ma.array(np.zeros(y.shape))
     for i in range(0,limits[0]):
         for ii in range(0,limits[1]):
             coord = utm.to_latlon(x[i,ii],y[i,ii],code,zone)

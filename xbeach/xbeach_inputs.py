@@ -43,23 +43,33 @@ def write_tide(root_dir,time,front,back):
 				front[i] = 0.5
 			else:
 				front[i] = front[i-1]
+		if float(back[i])/float(back[i]) != 1:
+			if float(back[i-1])/float(back[i-1]) != 1:
+				back[i] = 0.5
+			else:
+				back[i] = back[i-1]				
 		 #   front[i] = 0
 		 #  back[i] = 0
-		data.append('    {:.4e}    {:.4e}    {:.4e}'.format(float(time[i]),float(front[i]),float(front[i])) + '\n')
-		#data.append('    {:.4e}    {:.4e}    {:.4e}'.format(float(time[i]),float(front[i])*1.5,float(back[i])*1.5) + '\n')
+		data.append('    {:.4e}    {:.4e}    {:.4e}'.format(float(time[i]),float(front[i]),float(back[i])) + '\n')
+		#data.append('    {:.4e}    {:.4e}    {:.4e}'.format(float(time[i]),float(front[i]),float(back[i])*1.5) + '\n')
 	with open(file,'w') as fin:
 		fin.writelines(data)
 	return
 
 def write_2delft(path:str,array:np.array,filename:str):
-    xx,yy = array.shape
-    with open(str(path / filename),'w') as fin:
-        for i in range(0,xx):
-            for ii in range(0,yy):
-                if (ii/12).is_integer() and ii != 0:
-                    fin.write('   '+str(array[i,ii]) + '\n')
-                else:
-                    fin.write('   '+str(array[i,ii]))
-    return
+	xx,yy = array.shape
+	nl = ''
+
+	with open(str(path / filename),'w') as fin:
+		for i in range(0,xx):
+			line = []
+			for ii in range(0,yy):
+				line.append('   '+str(array[i,ii]) + nl)
+				if len(line)>0 and (len(line)/12).is_integer():
+					nl = '\n'
+
+		for i in range(len(line)):
+			fin.write(line[i])
+	return
 
 
