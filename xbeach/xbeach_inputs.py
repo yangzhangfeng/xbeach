@@ -58,18 +58,18 @@ def write_tide(root_dir,time,front,back):
 
 def write_2delft(path:str,array:np.array,filename:str):
 	xx,yy = array.shape
-	nl = ''
-
+	nl = '\n'
+	lines = np.ceil(yy/12)
 	with open(str(path / filename),'w') as fin:
-		for i in range(0,xx):
-			line = []
-			for ii in range(0,yy):
-				line.append('   '+str(array[i,ii]) + nl)
-				if len(line)>0 and (len(line)/12).is_integer():
-					nl = '\n'
+		for i in range(xx):
+			for ii in range(yy):
+				if ii%12 == 0:
+					fin.write(nl + '   ' + str(array[i,ii]))
+					#fin.write('   ' + str(array[i,ii]) + nl)
+				
+				fin.write('   ' + str(array[i,ii]))
+				#if len(line)>0 and (len(line)/12).is_integer():
 
-		for i in range(len(line)):
-			fin.write(line[i])
 	return
 
 
