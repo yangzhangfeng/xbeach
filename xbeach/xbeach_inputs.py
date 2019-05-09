@@ -64,12 +64,42 @@ def write_2delft(path:str,array:np.array,filename:str):
 		for i in range(xx):
 			for ii in range(yy):
 				if ii%12 == 0:
-					fin.write(nl + '   ' + str(array[i,ii]))
-					#fin.write('   ' + str(array[i,ii]) + nl)
-				
-				fin.write('   ' + str(array[i,ii]))
-				#if len(line)>0 and (len(line)/12).is_integer():
-
+					fin.write(nl + '   ' + '{:0.4e}'.format(array[i,ii]))				
+				fin.write('   ' +  '{:0.4e}'.format(array[i,ii]))
 	return
 
+def frict_locator(path:str,grid_x:np.array, grid_y:np.array, elevation:np.array, v_types:list=[1,2,3,0],mannings:list=[0.027,0.02,0.025,0.100]):
+    xx,yy = grid_x.shape
+    vege = np.zeros((xx,yy))
+    bed  = np.zeros((xx,yy))
+    z0 = elevation
+    for i in range(0,xx):
+        for ii in range(0,yy):
+            if z0[i,ii] < -.01 and grid_x[i,ii] > -75.955 and grid_y[i,ii] < 38.1485:
+                bed[i,ii] = mannings[0]
+            elif .05 < z0[i,ii] < 0.6 and -75.955 < grid_x[i,ii] < -75.954 and 38.1487< grid_y[i,ii] < 38.1495:
+                vege[i,ii] = v_types[1]
+            elif z0[i,ii]<-.01 and grid_x[i,ii]>-75.95325:
+                bed[i,ii] = mannings[0]
+            elif -0.05<z0[i,ii]<0.7 and grid_x[i,ii]>-75.955:
+                bed[i,ii] = mannings[2]
+                vege[i,ii]=v_types[0]
+            elif z0[i,ii]>0.7:
+                bed[i,ii] = mannings[3]
+                vege[i,ii]=v_types[2]
+            else:
+                bed[i,ii] = mannings[1]
+                vege[i,ii]=v_types[3]
+    return vege,bed
 
+def init_zsinit(path:str,z:np.array,zs:np.array):
+	xx,yy = z.shape
+	zinit = np.ma.array(np.zeros((xx,yy)))
+
+	for i in range(xx):
+		for ii in range(yy):
+			if z[i,ii] >= 0:
+				zinit[i,ii] = -99999
+			else:
+				zinit[i,ii] = zs[i,ii]
+	return zinit
