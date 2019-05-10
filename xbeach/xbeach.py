@@ -114,7 +114,7 @@ def map_velocity(x,y,data,u_velocity,v_velocity,start,time,title,levels,lat1:flo
 
 def contour_map(x,y,z,data,title,levels,lat1:float,lat2:float,lon1:float,lon2:float,label:str='elevation(m)',figsize=(18,10),cmap='jet'):
     #if data.mask:
-        #data[data.mask]=np.nan
+    data[data.mask]=np.nan
     fig,ax = plt.subplots(figsize=figsize)
     plt.contourf(x,y,data,levels=levels,cmap=cmap,shading='gouraud',vmin=np.min(levels),vmax=np.max(levels),aspect='auto')
     m = Basemap(projection='cyl',llcrnrlat=lat1,urcrnrlat=lat2,llcrnrlon=lon1,
