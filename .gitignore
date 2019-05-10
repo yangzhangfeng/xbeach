@@ -1,10 +1,7 @@
 # Jupyter
 __pycache__/
 .ipynb_checkpoints/
-xbeach_python/gifs/*
-*.gif
 *.png
-*.html
 # MAC
 .DS_Store
 .AppleDouble
