@@ -99,7 +99,7 @@ def init_zsinit(path:str,z:np.array,zs:np.array):
 	for i in range(xx):
 		for ii in range(yy):
 			if z[i,ii] >= 0:
-				zinit[i,ii] = -99999
+				zinit[i,ii] = 0
 			else:
 				zinit[i,ii] = zs[i,ii]
 	return zinit
